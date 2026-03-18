@@ -1,0 +1,69 @@
+{
+  "model_type": "XGBoost",
+  "calibration_method": "Isotonic",
+  "features": [
+    "HighBP",
+    "HighChol",
+    "CholCheck",
+    "BMI",
+    "Smoker",
+    "Stroke",
+    "HeartDiseaseorAttack",
+    "PhysActivity",
+    "Fruits",
+    "Veggies",
+    "HvyAlcoholConsump",
+    "AnyHealthcare",
+    "NoDocbcCost",
+    "GenHlth",
+    "MentHlth",
+    "PhysHlth",
+    "DiffWalk",
+    "Sex",
+    "Age",
+    "Education",
+    "Income",
+    "BMI_Cat",
+    "CardioRisk",
+    "HealthyScore",
+    "TotalBadHealthDays",
+    "BMI_Age",
+    "AgeGroup",
+    "SocioIndex"
+  ],
+  "n_features": 28,
+  "risk_thresholds": {
+    "low": 0.2,
+    "medium": 0.5
+  },
+  "val_metrics": {
+    "Accuracy": 0.7563643220818405,
+    "Balanced Accuracy": 0.7563643220818405,
+    "ROC-AUC": 0.831925321731614,
+    "F1-Score": 0.7665341525117456,
+    "Recall": 0.7999245709975485,
+    "Precision": 0.7358196010407633,
+    "Brier Score": 0.16589823365211487
+  },
+  "test_metrics": {
+    "Accuracy": 0.7553753300641267,
+    "Balanced Accuracy": 0.7553753300641267,
+    "ROC-AUC": 0.8329982949147252,
+    "F1-Score": 0.7663904899135446,
+    "Recall": 0.8025273481705016,
+    "Precision": 0.7333678042054464,
+    "Brier Score": 0.16527362167835236
+  },
+  "chosen_dataset": "balanced_5050",
+  "best_params": {
+    "subsample": 0.9,
+    "reg_lambda": 1.5,
+    "reg_alpha": 0.01,
+    "n_estimators": 300,
+    "min_child_weight": 5,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "gamma": 0.05,
+    "colsample_bytree": 0.7
+  }
+}

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DiabetesCheck — Hệ thống Sàng lọc Tiểu Đường</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-cross">✚</span>
+      <div>
+        <span class="logo-name">DiabetesCheck</span>
+        <span class="logo-sub">Hệ thống Sàng lọc Nguy cơ Tiểu Đường</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-dot"></span>
+      <span>AI-Powered · XGBoost</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════ HERO BANNER ══════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Kiểm tra nguy cơ <span class="highlight">Tiểu Đường</span> của bạn</h1>
+      <p>Nhập thông tin sức khỏe bên dưới. Mô hình AI sẽ phân tích và đưa ra đánh giá nguy cơ cùng lời khuyên cá nhân hóa. Nếu bạn không biết một chỉ số nào, hãy để trống — hệ thống sẽ tự động sử dụng giá trị tham chiếu từ dữ liệu thực tế.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card"><span class="stat-num">28</span><span class="stat-lbl">Chỉ số phân tích</span></div>
+      <div class="stat-card"><span class="stat-num">85%+</span><span class="stat-lbl">Độ chính xác AUC</span></div>
+      <div class="stat-card"><span class="stat-num">14</span><span class="stat-lbl">Quy tắc tư vấn</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ DISCLAIMER ══════════════════════ -->
+<div class="disclaimer-bar">
+  <span class="disc-icon">⚠️</span>
+  <span>Công cụ này chỉ mang tính <strong>sàng lọc hỗ trợ</strong>, không thay thế chẩn đoán y tế. Vui lòng tham khảo bác sĩ để được đánh giá chính xác.</span>
+</div>
+
+<!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+<main class="main-container">
+
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+
+    <!-- ── Progress steps ── -->
+    <div class="progress-steps">
+      <div class="step active" data-step="1"><span class="step-num">1</span><span class="step-lbl">Cá nhân</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="2"><span class="step-num">2</span><span class="step-lbl">Chỉ số</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="3"><span class="step-num">3</span><span class="step-lbl">Tiền sử</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="4"><span class="step-num">4</span><span class="step-lbl">Lối sống</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="5"><span class="step-num">5</span><span class="step-lbl">Sức khỏe</span></div>
+    </div>
+
+    <form id="diabetesForm">
+
+      <!-- ══ STEP 1: Thông tin cá nhân ══ -->
+      <div class="form-step active" id="step-1">
+        <div class="section-header">
+          <span class="section-icon">👤</span>
+          <div><h2>Thông tin Cá nhân</h2><p>Thông tin nhân khẩu học cơ bản</p></div>
+        </div>
+        <div class="fields-grid">
+
+          <div class="field-group">
+            <label>Giới tính <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="sex-f" name="Sex" value="0"><label class="radio-card" for="sex-f"><span>♀</span>Nữ</label>
+              <input type="radio" id="sex-m" name="Sex" value="1"><label class="radio-card" for="sex-m"><span>♂</span>Nam</label>
+              <input type="radio" id="sex-u" name="Sex" value="unknown" checked><label class="radio-card unknown" for="sex-u"><span>?</span>Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="Age">Nhóm tuổi <span class="optional-tag">Tuỳ chọn</span></label>
+            <select id="Age" name="Age">
+              <option value="unknown" selected>— Không rõ / Để trống —</option>
+              <option value="1">18 – 24</option>
+              <option value="2">25 – 29</option>
+              <option value="3">30 – 34</option>
+              <option value="4">35 – 39</option>
+              <option value="5">40 – 44</option>
+              <option value="6">45 – 49</option>
+              <option value="7">50 – 54</option>
+              <option value="8">55 – 59</option>
+              <option value="9">60 – 64</option>
+              <option value="10">65 – 69</option>
+              <option value="11">70 – 74</option>
+              <option value="12">75 – 79</option>
+              <option value="13">80 trở lên</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="Education">Trình độ học vấn <span class="optional-tag">Tuỳ chọn</span></label>
+            <select id="Education" name="Education">
+              <option value="unknown" selected>— Không rõ / Để trống —</option>
+              <option value="1">Chưa tốt nghiệp THCS (lớp 1–8)</option>
+              <option value="2">Chưa tốt nghiệp THPT (lớp 9–11)</option>
+              <option value="3">Tốt nghiệp THPT / GED</option>
+              <option value="4">Một số khóa học đại học / Cao đẳng</option>
+              <option value="5">Tốt nghiệp Đại học</option>
+              <option value="6">Thạc sĩ / Tiến sĩ trở lên</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="Income">Mức thu nhập hàng năm <span class="optional-tag">Tuỳ chọn</span></label>
+            <select id="Income" name="Income">
+              <option value="unknown" selected>— Không rõ / Để trống —</option>
+              <option value="1">Dưới $10,000</option>
+              <option value="2">$10,000 – $14,999</option>
+              <option value="3">$15,000 – $19,999</option>
+              <option value="4">$20,000 – $24,999</option>
+              <option value="5">$25,000 – $34,999</option>
+              <option value="6">$35,000 – $49,999</option>
+              <option value="7">$50,000 – $74,999</option>
+              <option value="8">Từ $75,000 trở lên</option>
+            </select>
+          </div>
+        </div>
+        <div class="step-nav"><button type="button" class="btn-next" onclick="goStep(2)">Tiếp theo →</button></div>
+      </div>
+
+      <!-- ══ STEP 2: Chỉ số sức khỏe ══ -->
+      <div class="form-step" id="step-2">
+        <div class="section-header">
+          <span class="section-icon">📊</span>
+          <div><h2>Chỉ số Sức khỏe</h2><p>Các chỉ số đo lường lâm sàng</p></div>
+        </div>
+        <div class="fields-grid">
+
+          <div class="field-group bmi-group">
+            <label for="BMI">Chỉ số BMI <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="bmi-input-wrap">
+              <input type="number" id="BMI" name="BMI" min="10" max="80" step="0.1"
+                     placeholder="Ví dụ: 23.5" oninput="updateBMIBar(this.value)">
+              <div class="bmi-indicator" id="bmiIndicator">–</div>
+            </div>
+            <div class="bmi-scale">
+              <div class="bmi-bar-track">
+                <div class="bmi-bar-fill" id="bmiFill"></div>
+                <div class="bmi-marker" id="bmiMarker"></div>
+              </div>
+              <div class="bmi-labels"><span>Thiếu cân</span><span>Bình thường</span><span>Thừa cân</span><span>Béo phì</span></div>
+            </div>
+            <span class="field-hint">Để trống nếu không biết → hệ thống dùng trung vị (29.0)</span>
+          </div>
+
+          <div class="field-group">
+            <label>Huyết áp cao <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="bp-yes" name="HighBP" value="1"><label class="radio-card danger" for="bp-yes">✔ Có</label>
+              <input type="radio" id="bp-no"  name="HighBP" value="0"><label class="radio-card safe"   for="bp-no">✘ Không</label>
+              <input type="radio" id="bp-u"   name="HighBP" value="unknown" checked><label class="radio-card unknown" for="bp-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Cholesterol cao <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="chol-yes" name="HighChol" value="1"><label class="radio-card danger"  for="chol-yes">✔ Có</label>
+              <input type="radio" id="chol-no"  name="HighChol" value="0"><label class="radio-card safe"    for="chol-no">✘ Không</label>
+              <input type="radio" id="chol-u"   name="HighChol" value="unknown" checked><label class="radio-card unknown" for="chol-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Kiểm tra Cholesterol trong 5 năm qua <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="cc-yes" name="CholCheck" value="1"><label class="radio-card safe"    for="cc-yes">✔ Đã kiểm tra</label>
+              <input type="radio" id="cc-no"  name="CholCheck" value="0"><label class="radio-card warning" for="cc-no">✘ Chưa kiểm tra</label>
+              <input type="radio" id="cc-u"   name="CholCheck" value="unknown" checked><label class="radio-card unknown" for="cc-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Sức khỏe tổng quát (tự đánh giá)</label>
+            <div class="gen-health-scale">
+              <input type="radio" id="gh1" name="GenHlth" value="1"><label class="gh-opt gh-1" for="gh1">Xuất sắc</label>
+              <input type="radio" id="gh2" name="GenHlth" value="2"><label class="gh-opt gh-2" for="gh2">Rất tốt</label>
+              <input type="radio" id="gh3" name="GenHlth" value="3" checked><label class="gh-opt gh-3" for="gh3">Tốt</label>
+              <input type="radio" id="gh4" name="GenHlth" value="4"><label class="gh-opt gh-4" for="gh4">Bình thường</label>
+              <input type="radio" id="gh5" name="GenHlth" value="5"><label class="gh-opt gh-5" for="gh5">Kém</label>
+            </div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn-back" onclick="goStep(1)">← Quay lại</button>
+          <button type="button" class="btn-next" onclick="goStep(3)">Tiếp theo →</button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: Tiền sử bệnh ══ -->
+      <div class="form-step" id="step-3">
+        <div class="section-header">
+          <span class="section-icon">🏥</span>
+          <div><h2>Tiền sử Bệnh lý</h2><p>Các bệnh lý đã được chẩn đoán</p></div>
+        </div>
+        <div class="fields-grid">
+
+          <div class="field-group">
+            <label>Tiền sử đột quỵ <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="str-yes" name="Stroke" value="1"><label class="radio-card danger" for="str-yes">✔ Có</label>
+              <input type="radio" id="str-no"  name="Stroke" value="0"><label class="radio-card safe"   for="str-no">✘ Không</label>
+              <input type="radio" id="str-u"   name="Stroke" value="unknown" checked><label class="radio-card unknown" for="str-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Bệnh tim hoặc nhồi máu cơ tim <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="hd-yes" name="HeartDiseaseorAttack" value="1"><label class="radio-card danger" for="hd-yes">✔ Có</label>
+              <input type="radio" id="hd-no"  name="HeartDiseaseorAttack" value="0"><label class="radio-card safe"   for="hd-no">✘ Không</label>
+              <input type="radio" id="hd-u"   name="HeartDiseaseorAttack" value="unknown" checked><label class="radio-card unknown" for="hd-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Khó khăn khi đi bộ hoặc leo cầu thang <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="dw-yes" name="DiffWalk" value="1"><label class="radio-card warning" for="dw-yes">✔ Có</label>
+              <input type="radio" id="dw-no"  name="DiffWalk" value="0"><label class="radio-card safe"    for="dw-no">✘ Không</label>
+              <input type="radio" id="dw-u"   name="DiffWalk" value="unknown" checked><label class="radio-card unknown" for="dw-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Có bảo hiểm y tế / Bảo hiểm sức khỏe <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="hc-yes" name="AnyHealthcare" value="1"><label class="radio-card safe"    for="hc-yes">✔ Có</label>
+              <input type="radio" id="hc-no"  name="AnyHealthcare" value="0"><label class="radio-card warning" for="hc-no">✘ Không</label>
+              <input type="radio" id="hc-u"   name="AnyHealthcare" value="unknown" checked><label class="radio-card unknown" for="hc-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Không thể gặp bác sĩ do chi phí (trong 12 tháng qua) <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="nd-yes" name="NoDocbcCost" value="1"><label class="radio-card warning" for="nd-yes">✔ Có</label>
+              <input type="radio" id="nd-no"  name="NoDocbcCost" value="0"><label class="radio-card safe"    for="nd-no">✘ Không</label>
+              <input type="radio" id="nd-u"   name="NoDocbcCost" value="unknown" checked><label class="radio-card unknown" for="nd-u">? Không biết</label>
+            </div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn-back" onclick="goStep(2)">← Quay lại</button>
+          <button type="button" class="btn-next" onclick="goStep(4)">Tiếp theo →</button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 4: Lối sống ══ -->
+      <div class="form-step" id="step-4">
+        <div class="section-header">
+          <span class="section-icon">🌿</span>
+          <div><h2>Lối sống & Thói quen</h2><p>Các yếu tố hành vi ảnh hưởng đến sức khỏe</p></div>
+        </div>
+        <div class="fields-grid">
+
+          <div class="field-group">
+            <label>Hoạt động thể chất trong 30 ngày qua (ngoài công việc) <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="pa-yes" name="PhysActivity" value="1"><label class="radio-card safe"    for="pa-yes">✔ Có tập luyện</label>
+              <input type="radio" id="pa-no"  name="PhysActivity" value="0"><label class="radio-card warning" for="pa-no">✘ Không tập</label>
+              <input type="radio" id="pa-u"   name="PhysActivity" value="unknown" checked><label class="radio-card unknown" for="pa-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Ăn trái cây ≥ 1 lần/ngày <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="fr-yes" name="Fruits" value="1"><label class="radio-card safe"    for="fr-yes">✔ Có</label>
+              <input type="radio" id="fr-no"  name="Fruits" value="0"><label class="radio-card warning" for="fr-no">✘ Không</label>
+              <input type="radio" id="fr-u"   name="Fruits" value="unknown" checked><label class="radio-card unknown" for="fr-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Ăn rau xanh ≥ 1 lần/ngày <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="vg-yes" name="Veggies" value="1"><label class="radio-card safe"    for="vg-yes">✔ Có</label>
+              <input type="radio" id="vg-no"  name="Veggies" value="0"><label class="radio-card warning" for="vg-no">✘ Không</label>
+              <input type="radio" id="vg-u"   name="Veggies" value="unknown" checked><label class="radio-card unknown" for="vg-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Đã hút ≥ 100 điếu thuốc trong cả cuộc đời <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="sm-yes" name="Smoker" value="1"><label class="radio-card danger"  for="sm-yes">✔ Có</label>
+              <input type="radio" id="sm-no"  name="Smoker" value="0"><label class="radio-card safe"    for="sm-no">✘ Không</label>
+              <input type="radio" id="sm-u"   name="Smoker" value="unknown" checked><label class="radio-card unknown" for="sm-u">? Không biết</label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Uống rượu bia nhiều (Nam &gt;14 ly/tuần, Nữ &gt;7 ly/tuần) <span class="optional-tag">Tuỳ chọn</span></label>
+            <div class="radio-cards">
+              <input type="radio" id="al-yes" name="HvyAlcoholConsump" value="1"><label class="radio-card danger"  for="al-yes">✔ Có</label>
+              <input type="radio" id="al-no"  name="HvyAlcoholConsump" value="0"><label class="radio-card safe"    for="al-no">✘ Không</label>
+              <input type="radio" id="al-u"   name="HvyAlcoholConsump" value="unknown" checked><label class="radio-card unknown" for="al-u">? Không biết</label>
+            </div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button type="button" class="btn-back" onclick="goStep(3)">← Quay lại</button>
+          <button type="button" class="btn-next" onclick="goStep(5)">Tiếp theo →</button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 5: Tình trạng sức khỏe gần đây ══ -->
+      <div class="form-step" id="step-5">
+        <div class="section-header">
+          <span class="section-icon">📋</span>
+          <div><h2>Sức khỏe Gần đây</h2><p>Tình trạng sức khỏe trong 30 ngày qua</p></div>
+        </div>
+        <div class="fields-grid">
+
+          <div class="field-group">
+            <label for="MentHlth">
+              Số ngày sức khỏe tinh thần <em>kém</em> trong 30 ngày qua
+              <span class="optional-tag">Tuỳ chọn</span>
+            </label>
+            <div class="slider-wrap">
+              <input type="range" id="MentHlth" name="MentHlth" min="0" max="30" value="0"
+                     oninput="updateSliderVal('MentHlth','mentVal')">
+              <div class="slider-val-display">
+                <span id="mentVal">0</span><span class="slider-unit"> ngày</span>
+              </div>
+            </div>
+            <div class="slider-labels"><span>0 ngày</span><span>15 ngày</span><span>30 ngày</span></div>
+          </div>
+
+          <div class="field-group">
+            <label for="PhysHlth">
+              Số ngày sức khỏe thể chất <em>kém</em> (ốm/chấn thương) trong 30 ngày qua
+              <span class="optional-tag">Tuỳ chọn</span>
+            </label>
+            <div class="slider-wrap">
+              <input type="range" id="PhysHlth" name="PhysHlth" min="0" max="30" value="0"
+                     oninput="updateSliderVal('PhysHlth','physVal')">
+              <div class="slider-val-display">
+                <span id="physVal">0</span><span class="slider-unit"> ngày</span>
+              </div>
+            </div>
+            <div class="slider-labels"><span>0 ngày</span><span>15 ngày</span><span>30 ngày</span></div>
+          </div>
+
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-area">
+          <button type="button" class="btn-back" onclick="goStep(4)">← Quay lại</button>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="btn-icon">🔬</span>
+            <span>Phân tích nguy cơ</span>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div><!-- /form-panel -->
+
+  <!-- RESULT PANEL -->
+  <div class="result-panel" id="resultPanel">
+    <div class="result-placeholder" id="resultPlaceholder">
+      <div class="placeholder-icon">🩺</div>
+      <h3>Kết quả sẽ hiển thị ở đây</h3>
+      <p>Điền thông tin và nhấn <strong>Phân tích nguy cơ</strong> để nhận đánh giá của bạn.</p>
+    </div>
+
+    <!-- Result content (hidden until prediction) -->
+    <div id="resultContent" style="display:none">
+
+      <!-- Risk gauge -->
+      <div class="risk-gauge-card" id="riskCard">
+        <div class="risk-header">
+          <span class="risk-icon" id="riskIcon">🔴</span>
+          <div>
+            <div class="risk-title" id="riskTitle">Nguy cơ cao</div>
+            <div class="risk-subtitle" id="riskSubtitle">Cần khám ngay</div>
+          </div>
+        </div>
+
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 200 110">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stop-color="#27ae60"/>
+                <stop offset="40%"  stop-color="#f39c12"/>
+                <stop offset="100%" stop-color="#e74c3c"/>
+              </linearGradient>
+            </defs>
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e8ecf0" stroke-width="16" stroke-linecap="round"/>
+            <path id="gaugeArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251"/>
+            <text x="100" y="88" text-anchor="middle" class="gauge-pct" id="gaugePct">0%</text>
+            <text x="100" y="105" text-anchor="middle" class="gauge-label">Xác suất tiểu đường</text>
+          </svg>
+          <div class="gauge-ticks">
+            <span class="tick-low">Thấp</span>
+            <span class="tick-med">Trung bình</span>
+            <span class="tick-high">Cao</span>
+          </div>
+        </div>
+
+        <div class="risk-summary" id="riskSummary"></div>
+        <div class="urgency-badge" id="urgencyBadge"></div>
+      </div>
+
+      <!-- Imputation notice -->
+      <div class="impute-notice" id="imputeNotice" style="display:none">
+        <div class="impute-header">
+          <span>ℹ️</span>
+          <strong id="imputeTitle">Một số trường được tự động điền</strong>
+        </div>
+        <div class="impute-list" id="imputeList"></div>
+      </div>
+
+      <!-- Advice cards -->
+      <div class="advice-section">
+        <h3 class="advice-heading">💡 Lời khuyên cá nhân hóa</h3>
+        <div class="advice-list" id="adviceList"></div>
+      </div>
+
+      <!-- Re-test button -->
+      <button class="btn-retest" onclick="resetForm()">🔄 Kiểm tra lại</button>
+
+    </div><!-- /resultContent -->
+  </div><!-- /result-panel -->
+
+</main>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">✚ DiabetesCheck</div>
+    <p>Mô hình XGBoost được huấn luyện trên bộ dữ liệu BRFSS 2015 (253,680 mẫu). Kết quả chỉ mang tính tham khảo.</p>
+    <p class="footer-copy">© 2025 DiabetesCheck · Dự án nghiên cứu học thuật</p>
+  </div>
+</footer>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display:none">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>AI đang phân tích dữ liệu của bạn...</p>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

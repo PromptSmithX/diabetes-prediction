@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+env/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data (raw CSV files, quá lớn)
+archive/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
